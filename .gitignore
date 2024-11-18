@@ -1,3 +1,16 @@
+# Terraform
+infrastructure/.terraform/
+infrastructure/*.tfstate
+infrastructure/*.tfstate.*
+infrastructure/.terraform.lock.hcl
+infrastructure/override.tf
+infrastructure/override.tf.json
+infrastructure/*.override.tf
+infrastructure/*.override.tf.json
+infrastructure/terraform.tfvars
+infrastructure/secret.tfvars
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
