@@ -46,6 +46,8 @@ resource "azurerm_network_security_rule" "allow_http" {
   source_address_prefix    = "Internet"
   destination_address_prefix = "*"
   network_security_group_name = azurerm_network_security_group.nsg.name
+
+  resource_group_name = var.resource_group_name
 }
 
 resource "azurerm_network_security_rule" "allow_https" {
@@ -60,4 +62,6 @@ resource "azurerm_network_security_rule" "allow_https" {
   source_address_prefix    = "Internet"
   destination_address_prefix = "*"
   network_security_group_name = azurerm_network_security_group.nsg.name
+
+  resource_group_name = var.resource_group_name
 }
