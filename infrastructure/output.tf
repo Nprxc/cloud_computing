@@ -1,26 +1,25 @@
 output "database" {
-  value = length(module.database) == 0 ? null : {
-    host     = local.database_connection.host
-    port     = local.database_connection.port
-    database = local.database.name
-    username = local.database.username
-    password = local.database.password
+  value = {
+    host     = module.database.fqdn
+    port     = 5432
+    database = module.database.database_name
+    username = module.database.admin_username
+    password = var.admin_password
     ssl      = "enabled"
   }
   sensitive   = true
   description = "Database connection information"
 }
 
-output "api" {
-  value = length(module.examples_api_service) == 0 ? null : {
-    url = module.examples_api_service[0].url
+
+output "network" {
+  value = {
+    vnet_id           = module.network.vnet_id
+    subnet_api_id     = module.network.subnet_api_id
+    subnet_database_id = module.network.subnet_database_id
+    subnet_storage_id = module.network.subnet_storage_id
+    nsg_id            = module.network.nsg_id
   }
-  description = "URL to access the HTTP API"
+  description = "Network information"
 }
 
-output "storage" {
-  value = length(module.api_storage) == 0 ? null : {
-    url = local.storage_url
-  }
-  description = "URL to access the storage account"
-}

@@ -24,3 +24,24 @@ module "network" {
   allow_http          = var.allow_http
   allow_https         = var.allow_https
 }
+
+module "database" {
+  source              = "./modules/database"
+  resource_group_name = azurerm_resource_group.cloud_computing_project.name
+  location            = var.location
+  server_name         = var.database_server_name
+  database_name       = var.database_name
+  admin_username      = var.admin_username
+  admin_password      = var.admin_password
+  sku_name            = var.sku_name
+  storage_mb          = var.storage_mb
+  backup_retention_days = var.backup_retention_days
+  geo_redundant_backup_enabled = var.geo_redundant_backup_enabled
+  charset             = var.charset
+  collation           = var.collation
+  subnet_id           = module.network.subnet_database_id
+  ssl_enforcement_enabled = var.ssl_enforcement_enabled
+
+}
+
+

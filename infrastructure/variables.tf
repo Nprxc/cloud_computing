@@ -79,7 +79,6 @@ variable "allow_https" {
   description = "Allow HTTPS access"
 }
 
-# Identité (variables sensibles uniquement nécessaires pour l'accès)
 variable "subscription_id" {
   type        = string
   nullable    = false
@@ -90,4 +89,67 @@ variable "email_address" {
   type        = string
   nullable    = false
   description = "Email address for administrative purposes"
+}
+
+variable "database_server_name" {
+  type        = string
+  description = "Name of the database server"
+}
+
+variable "database_name" {
+  type        = string
+  description = "Name of the database"
+}
+
+variable "admin_username" {
+  type        = string
+  description = "Admin username for the database"
+}
+
+variable "admin_password" {
+  type        = string
+  sensitive   = true
+  description = "Admin password for the database"
+}
+
+variable "sku_name" {
+  type        = string
+  default     = "B_Gen5_1"
+  description = "SKU for the database server"
+}
+
+variable "storage_mb" {
+  type        = number
+  default     = 5120
+  description = "Storage size in MB"
+}
+
+variable "backup_retention_days" {
+  type        = number
+  default     = 7
+  description = "Number of days for backup retention"
+}
+
+variable "geo_redundant_backup_enabled" {
+  type        = bool
+  default     = false
+  description = "Enable geo-redundant backup"
+}
+
+variable "charset" {
+  type        = string
+  default     = "UTF8"
+  description = "Charset for the database"
+}
+
+variable "collation" {
+  type        = string
+  default     = "en_US.utf8"
+  description = "Collation for the database"
+}
+
+variable "ssl_enforcement_enabled" {
+  type        = bool
+  default     = true
+  description = "Enable SSL enforcement for the database"
 }
