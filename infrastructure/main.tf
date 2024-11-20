@@ -4,11 +4,15 @@ resource "azurerm_resource_group" "cloud_computing_project" {
   location = var.location
 }
 
-# Module réseau
+data "azurerm_subscription" "current" {}
+
 module "network" {
   source              = "./modules/network"
   resource_group_name = azurerm_resource_group.cloud_computing_project.name
   location            = azurerm_resource_group.cloud_computing_project.location
+
+  subscription_id     = var.subscription_id
+  tenant_id           = var.tenant_id
 
   vnet_name           = var.vnet_name
   vnet_address_space  = var.vnet_address_space
@@ -26,22 +30,31 @@ module "network" {
 }
 
 module "database" {
-  source              = "./modules/database"
-  resource_group_name = azurerm_resource_group.cloud_computing_project.name
-  location            = var.location
-  server_name         = var.database_server_name
-  database_name       = var.database_name
-  admin_username      = var.admin_username
-  admin_password      = var.admin_password
-  sku_name            = var.sku_name
-  storage_mb          = var.storage_mb
-  backup_retention_days = var.backup_retention_days
-  geo_redundant_backup_enabled = var.geo_redundant_backup_enabled
-  charset             = var.charset
-  collation           = var.collation
-  subnet_id           = module.network.subnet_database_id
-  ssl_enforcement_enabled = var.ssl_enforcement_enabled
+  source = "./modules/database"
 
+  resource_group_name = azurerm_resource_group.cloud_computing_project.name
+  location            = azurerm_resource_group.cloud_computing_project.location
+
+  subscription_id     = var.subscription_id
+  tenant_id           = var.tenant_id
+  
+  vnet_id = module.network.vnet_id
+  subnet_id = module.network.subnet_database_id
+
+  entra_administrator_tenant_id      = var.tenant_id
+  entra_administrator_object_id      = var.azure_ad_user_object_id
+  entra_administrator_principal_type = "User"
+  entra_administrator_principal_name = var.email_address
+
+  server_name                     = var.database_server_name
+  database_administrator_login    = var.database_username
+  database_administrator_password = var.database_password
+  database_name                   = var.database_name
 }
 
-
+locals {
+  database_connection = {
+    host = try(module.database[0].server_address, null)
+    port = try(module.database[0].port, null)
+  }
+}

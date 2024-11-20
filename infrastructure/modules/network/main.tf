@@ -19,7 +19,18 @@ resource "azurerm_subnet" "database_subnet" {
   resource_group_name  = var.resource_group_name
   virtual_network_name = azurerm_virtual_network.vnet.name
   address_prefixes     = [var.subnet_database_prefix]
+
+  delegation {
+    name = "PostgreSQLFlexibleServerDelegation"
+    service_delegation {
+      name = "Microsoft.DBforPostgreSQL/flexibleServers"
+      actions = [
+        "Microsoft.Network/virtualNetworks/subnets/action",
+      ]
+    }
+  }
 }
+
 
 resource "azurerm_subnet" "storage_subnet" {
   name                 = var.subnet_storage_name

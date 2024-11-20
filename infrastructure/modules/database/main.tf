@@ -1,48 +1,61 @@
-resource "azurerm_postgresql_server" "db_server" {
-  name                = var.server_name
-  location            = var.location
+#modules/database/main.tf
+
+# Zone DNS privée
+resource "azurerm_private_dns_zone" "my_dns_zone" {
+  name                = "privatelink.postgres.database.azure.com"
   resource_group_name = var.resource_group_name
-  sku_name            = var.sku_name
-  version             = var.version_db
-  storage_mb          = var.storage_mb
-  backup_retention_days = var.backup_retention_days
-  geo_redundant_backup_enabled = var.geo_redundant_backup_enabled
-  administrator_login          = var.admin_username
-  administrator_login_password = var.admin_password
-  ssl_enforcement_enabled      = var.ssl_enforcement_enabled
-  public_network_access_enabled = false
 }
 
-resource "azurerm_postgresql_database" "database" {
-  name                = var.database_name
-  resource_group_name = var.resource_group_name
-  server_name         = azurerm_postgresql_server.db_server.name
-  charset             = var.charset
-  collation           = var.collation
+# Lien DNS privé avec le VNet
+resource "azurerm_private_dns_zone_virtual_network_link" "my_dns_zone_link" {
+  name                  = "dns-zone-link"
+  resource_group_name   = var.resource_group_name
+  private_dns_zone_name = azurerm_private_dns_zone.my_dns_zone.name
+  virtual_network_id    = var.vnet_id
 }
+resource "azurerm_postgresql_flexible_server" "playground_computing" {
+  administrator_login           = var.database_administrator_login
+  administrator_password        = var.database_administrator_password
+  auto_grow_enabled             = false
+  backup_retention_days         = 7
+  geo_redundant_backup_enabled  = false
+  location                      = var.location
+  name                          = var.server_name
+  public_network_access_enabled = false # Désactiver l'accès public
+  resource_group_name           = var.resource_group_name
+  sku_name                      = "B_Standard_B1ms"
+  storage_tier                  = "P4"
+  storage_mb                    = "32768"
+  version                       = "16"
+  zone                          = "1"
 
-resource "azurerm_private_endpoint" "db_private_endpoint" {
-  name                = "${var.database_name}-endpoint"
-  location            = var.location
-  resource_group_name = var.resource_group_name
-  subnet_id           = var.subnet_id
+  delegated_subnet_id = var.subnet_id # Utiliser le sous-réseau délégué
+  private_dns_zone_id = azurerm_private_dns_zone.my_dns_zone.id # Ajouter l'ID de la zone DNS privée
 
-  private_service_connection {
-    name                           = "${var.database_name}-connection"
-    private_connection_resource_id = azurerm_postgresql_server.db_server.id
-    is_manual_connection           = false
+  depends_on = [
+    azurerm_private_dns_zone.my_dns_zone,
+    azurerm_private_dns_zone_virtual_network_link.my_dns_zone_link
+  ]
+
+  authentication {
+    active_directory_auth_enabled = true
+    password_auth_enabled         = true
+    tenant_id                     = var.entra_administrator_tenant_id
   }
 }
 
-locals {
-  database_connection = {
-    host = azurerm_postgresql_server.db_server.fqdn
-    port = 5432
-  }
+# Administrateur Active Directory
+resource "azurerm_postgresql_flexible_server_active_directory_administrator" "administrator" {
+  tenant_id           = var.entra_administrator_tenant_id
+  resource_group_name = var.resource_group_name
+  server_name         = azurerm_postgresql_flexible_server.playground_computing.name
+  principal_type      = var.entra_administrator_principal_type
+  object_id           = var.entra_administrator_object_id
+  principal_name      = var.entra_administrator_principal_name
+}
 
-  database = {
-    name     = var.database_name
-    username = var.admin_username
-    password = var.admin_password
-  }
+# Création de la base de données
+resource "azurerm_postgresql_flexible_server_database" "database" {
+  name      = var.database_name
+  server_id = azurerm_postgresql_flexible_server.playground_computing.id
 }

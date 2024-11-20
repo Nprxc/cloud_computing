@@ -93,63 +93,36 @@ variable "email_address" {
 
 variable "database_server_name" {
   type        = string
-  description = "Name of the database server"
+  default     = null
+  description = "Name of the database server. Example: playground-computing-handlegithub"
 }
 
 variable "database_name" {
   type        = string
-  description = "Name of the database"
+  default     = null
+  description = "Name for the database within the server"
 }
 
-variable "admin_username" {
+variable "database_username" {
   type        = string
-  description = "Admin username for the database"
+  default     = null
+  description = "Administrator username for the database"
 }
 
-variable "admin_password" {
+variable "database_password" {
   type        = string
+  default     = null
   sensitive   = true
-  description = "Admin password for the database"
+  description = "Administrator password for the database"
+
 }
 
-variable "sku_name" {
+variable "azure_ad_user_object_id" {
+  description = "Object ID of the Azure AD user"
   type        = string
-  default     = "B_Gen5_1"
-  description = "SKU for the database server"
 }
 
-variable "storage_mb" {
-  type        = number
-  default     = 5120
-  description = "Storage size in MB"
-}
-
-variable "backup_retention_days" {
-  type        = number
-  default     = 7
-  description = "Number of days for backup retention"
-}
-
-variable "geo_redundant_backup_enabled" {
-  type        = bool
-  default     = false
-  description = "Enable geo-redundant backup"
-}
-
-variable "charset" {
+variable "tenant_id" {
+  description = "Tenant ID"
   type        = string
-  default     = "UTF8"
-  description = "Charset for the database"
-}
-
-variable "collation" {
-  type        = string
-  default     = "en_US.utf8"
-  description = "Collation for the database"
-}
-
-variable "ssl_enforcement_enabled" {
-  type        = bool
-  default     = true
-  description = "Enable SSL enforcement for the database"
 }
