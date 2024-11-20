@@ -1,10 +1,10 @@
 output "database" {
-  value = {
-    host     = module.database.fqdn
-    port     = 5432
-    database = module.database.database_name
-    username = module.database.admin_username
-    password = var.admin_password
+  value = length(module.database) == 0 ? null : {
+    host     = local.database_connection.host
+    port     = local.database_connection.port
+    database = var.database_name
+    username = var.database_username
+    password = var.database_password
     ssl      = "enabled"
   }
   sensitive   = true

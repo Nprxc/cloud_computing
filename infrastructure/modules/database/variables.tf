@@ -1,83 +1,79 @@
-variable "server_name" {
-  type        = string
-  description = "Name of the PostgreSQL server"
+variable "resource_group_name" {
+  type = string
+  description = "Name of the resource group within which to create the database server"
 }
 
 variable "location" {
-  type        = string
-  description = "Location of the PostgreSQL server"
+  type = string
+  description = "Name of the location where to create the database server"
 }
 
-variable "resource_group_name" {
-  type        = string
-  description = "Name of the resource group"
+variable "entra_administrator_tenant_id" {
+  type = string
+  nullable = false
+  description = "ID of the tenant in which the Microsoft Entra entity is located"
 }
 
-variable "database_name" {
-  type        = string
-  description = "Name of the database"
+variable "entra_administrator_object_id" {
+  type = string
+  nullable = false
+  description = "Object ID of the Microsoft Entra entity that will be used as a database administrator"
 }
 
-variable "admin_username" {
-  type        = string
-  description = "Administrator username for the database"
+variable "entra_administrator_principal_type" {
+  type = string
+  nullable = false
+  description = "Microsoft Entra entity type"
 }
 
-variable "admin_password" {
-  type        = string
-  sensitive   = true
+variable "entra_administrator_principal_name" {
+  type = string
+  nullable = false
+  description = "Microsoft Entra entity name"
+}
+
+variable "server_name" {
+  type = string
+  description = "Name of the database server. Will be used to compose the public hostname of the server"
+}
+
+variable "database_administrator_login" {
+  type = string
+  nullable = false
+  description = "Administrator login for the database"
+}
+
+variable "database_administrator_password" {
+  type = string
+  sensitive = true
+  nullable = false
   description = "Administrator password for the database"
 }
 
-variable "sku_name" {
-  type        = string
-  default     = "B_Gen5_1"
-  description = "SKU for the database server"
+variable "database_name" {
+  type = string
+  nullable = false
+  description = "Name for the database within the server"
 }
 
-variable "version_db" {
-  type        = string
-  default     = "11"
-  description = "PostgreSQL version"
-}
-
-variable "storage_mb" {
-  type        = number
-  default     = 5120
-  description = "Storage size in MB"
-}
-
-variable "backup_retention_days" {
-  type        = number
-  default     = 7
-  description = "Number of days to retain backups"
-}
-
-variable "geo_redundant_backup_enabled" {
-  type        = bool
-  default     = false
-  description = "Enable geo-redundant backups"
-}
-
-variable "charset" {
-  type        = string
-  default     = "UTF8"
-  description = "Database character set"
-}
-
-variable "collation" {
-  type        = string
-  default     = "en_US.utf8"
-  description = "Database collation"
-}
 
 variable "subnet_id" {
   type        = string
-  description = "Subnet ID for the private endpoint"
+  description = "The ID of the subnet delegated to PostgreSQL Flexible Servers."
 }
 
-variable "ssl_enforcement_enabled" {
-  type        = bool
-  default     = true
-  description = "Enable SSL enforcement for the database"
+variable "vnet_id" {
+  type        = string
+  description = "The ID of the virtual network to link to the private DNS zone."
+}
+
+
+variable "subscription_id" {
+  description = "Azure subscription ID"
+  type        = string
+}
+
+variable "tenant_id" {
+  description = "Azure tenant ID"
+  type        = string
 }

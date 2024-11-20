@@ -66,3 +66,13 @@ variable "allow_https" {
   default     = false
   description = "Allow HTTPS access"
 }
+
+variable "subscription_id" {
+  description = "Azure subscription ID"
+  type        = string
+}
+
+variable "tenant_id" {
+  description = "Azure tenant ID"
+  type        = string
+}
