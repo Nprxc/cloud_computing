@@ -38,20 +38,8 @@ resource "azurerm_postgresql_flexible_server" "playground_computing" {
   ]
 
   authentication {
-    active_directory_auth_enabled = true
     password_auth_enabled         = true
-    tenant_id                     = var.entra_administrator_tenant_id
   }
-}
-
-# Administrateur Active Directory
-resource "azurerm_postgresql_flexible_server_active_directory_administrator" "administrator" {
-  tenant_id           = var.entra_administrator_tenant_id
-  resource_group_name = var.resource_group_name
-  server_name         = azurerm_postgresql_flexible_server.playground_computing.name
-  principal_type      = var.entra_administrator_principal_type
-  object_id           = var.entra_administrator_object_id
-  principal_name      = var.entra_administrator_principal_name
 }
 
 # Création de la base de données
