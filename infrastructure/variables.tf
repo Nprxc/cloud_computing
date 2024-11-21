@@ -79,7 +79,6 @@ variable "allow_https" {
   description = "Allow HTTPS access"
 }
 
-# Identité (variables sensibles uniquement nécessaires pour l'accès)
 variable "subscription_id" {
   type        = string
   nullable    = false
@@ -90,4 +89,40 @@ variable "email_address" {
   type        = string
   nullable    = false
   description = "Email address for administrative purposes"
+}
+
+variable "database_server_name" {
+  type        = string
+  default     = null
+  description = "Name of the database server. Example: playground-computing-handlegithub"
+}
+
+variable "database_name" {
+  type        = string
+  default     = null
+  description = "Name for the database within the server"
+}
+
+variable "database_username" {
+  type        = string
+  default     = null
+  description = "Administrator username for the database"
+}
+
+variable "database_password" {
+  type        = string
+  default     = null
+  sensitive   = true
+  description = "Administrator password for the database"
+
+}
+
+variable "azure_ad_user_object_id" {
+  description = "Object ID of the Azure AD user"
+  type        = string
+}
+
+variable "tenant_id" {
+  description = "Tenant ID"
+  type        = string
 }
