@@ -8,29 +8,6 @@ variable "location" {
   description = "Name of the location where to create the database server"
 }
 
-variable "entra_administrator_tenant_id" {
-  type = string
-  nullable = false
-  description = "ID of the tenant in which the Microsoft Entra entity is located"
-}
-
-variable "entra_administrator_object_id" {
-  type = string
-  nullable = false
-  description = "Object ID of the Microsoft Entra entity that will be used as a database administrator"
-}
-
-variable "entra_administrator_principal_type" {
-  type = string
-  nullable = false
-  description = "Microsoft Entra entity type"
-}
-
-variable "entra_administrator_principal_name" {
-  type = string
-  nullable = false
-  description = "Microsoft Entra entity name"
-}
 
 variable "server_name" {
   type = string

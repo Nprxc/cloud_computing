@@ -40,12 +40,7 @@ module "database" {
   
   vnet_id = module.network.vnet_id
   subnet_id = module.network.subnet_database_id
-
-  entra_administrator_tenant_id      = var.tenant_id
-  entra_administrator_object_id      = var.azure_ad_user_object_id
-  entra_administrator_principal_type = "User"
-  entra_administrator_principal_name = var.email_address
-
+  
   server_name                     = var.database_server_name
   database_administrator_login    = var.database_username
   database_administrator_password = var.database_password
