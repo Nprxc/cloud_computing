@@ -1,8 +1,0 @@
-subscription_id = "347898c6-7077-44dc-8584-a3159769d393"
-tenant_id       = "19e51c11-d919-4a98-899d-9b9dc33f4e04"
-email_address   = "maxime.burckel@student.junia.com"
-database_password = "mdp"
-database_name  = "postgres"
-database_username   = "postgres"
-database_server_name   = "localhost"
-azure_ad_user_object_id = "ff9f1eef-3942-49c7-932b-3f8f0a83fb18"

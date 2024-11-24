@@ -34,9 +34,6 @@ module "database" {
 
   resource_group_name = azurerm_resource_group.cloud_computing_project.name
   location            = azurerm_resource_group.cloud_computing_project.location
-
-  subscription_id     = var.subscription_id
-  tenant_id           = var.tenant_id
   
   vnet_id = module.network.vnet_id
   subnet_id = module.network.subnet_database_id
@@ -50,6 +47,27 @@ module "database" {
   database_administrator_login    = var.database_username
   database_administrator_password = var.database_password
   database_name                   = var.database_name
+}
+
+module "appservice" {
+  source              = "./modules/appservice"
+  resource_group_name = azurerm_resource_group.cloud_computing_project.name
+  location            = azurerm_resource_group.cloud_computing_project.location
+
+  app_service_plan_name  = var.app_service_plan_name
+  app_service_plan_tier  = var.app_service_plan_tier
+  app_service_plan_size  = var.app_service_plan_size
+
+  app_service_name       = var.app_service_name
+  linux_fx_version       = var.linux_fx_version
+  always_on              = var.always_on
+
+  subnet_id              = module.network.subnet_appservice_id
+  nsg_id                 = module.network.nsg_id
+
+  default_app_settings = {
+    ENVIRONMENT = "Development"
+  }
 }
 
 locals {
