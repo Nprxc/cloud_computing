@@ -50,6 +50,16 @@ variable "subnet_storage_prefix" {
   description = "CIDR prefix for the storage subnet"
 }
 
+variable "subnet_appservice_name" {
+  type        = string
+  description = "Name of the App Service subnet"
+}
+
+variable "subnet_appservice_prefix" {
+  type        = string
+  description = "Address prefix for the App Service subnet"
+}
+
 variable "nsg_name" {
   type        = string
   description = "Name of the Network Security Group"

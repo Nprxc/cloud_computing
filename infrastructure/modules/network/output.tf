@@ -23,3 +23,8 @@ output "nsg_id" {
   value = azurerm_network_security_group.nsg.id
   description = "ID of the Network Security Group"
 }
+
+output "subnet_appservice_id" {
+  value       = azurerm_subnet.appservice.id
+  description = "ID of the App Service"
+}
