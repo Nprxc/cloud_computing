@@ -202,3 +202,25 @@ variable "database_password" {
   description = "Administrator password for the database"
   nullable    = false
 }
+
+variable "storage_account_name" {
+  type        = string
+  description = "Name of the Azure Storage Account"
+}
+
+variable "container_name" {
+  type        = string
+  description = "Name of the Blob Storage container"
+}
+
+variable "service_principal_id" {
+  type        = string
+  default     = null
+  description = "ID of the service principal to grant access to the Blob Storage container"
+}
+
+variable "user_principal_id" {
+  type        = string
+  default     = null
+  description = "ID of the user principal to grant access to the Blob Storage container"
+}

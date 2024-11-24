@@ -66,8 +66,30 @@ module "appservice" {
   nsg_id                 = module.network.nsg_id
 
   default_app_settings = {
-    ENVIRONMENT = "Development"
+    DB_HOST                   = module.database.private_dns_zone_name
+    DB_PORT                   = "5432"
+    DB_NAME                   = var.database_name
+    DB_USER                   = var.database_username
+    DB_PASSWORD               = var.database_password
+
+    # Configuration pour le Blob Storage
+    STORAGE_CONNECTION_STRING = module.storage.connection_string
+    STORAGE_CONTAINER_NAME    = module.storage.container_name
   }
+
+}
+
+module "storage" {
+  source = "./modules/storage"
+
+  resource_group_name = azurerm_resource_group.cloud_computing_project.name
+  location            = azurerm_resource_group.cloud_computing_project.location
+
+  storage_account_name = var.storage_account_name
+  container_name       = var.container_name
+
+  service_principal_id = var.service_principal_id
+  user_principal_id    = var.user_principal_id
 }
 
 locals {
