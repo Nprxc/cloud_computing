@@ -210,7 +210,7 @@ variable "storage_account_name" {
 
 variable "container_name" {
   type        = string
-  default     = "Blob Storage container"
+  default     = "file-storage"
   description = "Name of the Blob Storage container"
 }
 

@@ -23,3 +23,20 @@ output "network" {
   description = "Network information"
 }
 
+output "storage" {
+  value = {
+    account_name       = module.storage.storage_account_name
+    container_name     = module.storage.container_name
+    connection_string  = module.storage.connection_string
+  }
+  sensitive   = true
+  description = "Storage account and container details"
+}
+
+output "app_service" {
+  value = {
+    url         = module.appservice.url
+    principal_id = module.appservice.principal_id
+  }
+  description = "App service details, including URL and managed identity"
+}

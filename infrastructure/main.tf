@@ -54,7 +54,7 @@ module "appservice" {
   location            = azurerm_resource_group.cloud_computing_project.location
 
   app_name            = var.app_service_name
-  pricing_plan        = var.app_service_plan_tier
+  pricing_plan        = "B1"
   docker_image        = var.docker_image
   docker_registry_url = var.docker_registry_url
 
