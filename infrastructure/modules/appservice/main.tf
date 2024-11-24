@@ -1,30 +1,42 @@
-resource "azurerm_app_service_plan" "app_plan" {
-  name                = var.app_service_plan_name
-  location            = var.location
+# Création du Service Plan pour l'App Service
+resource "azurerm_service_plan" "app_service" {
+  name                = var.app_name
   resource_group_name = var.resource_group_name
-  kind                = "Linux" # ou "Windows", selon votre besoin
-  reserved            = true    # obligatoire pour les conteneurs ou le plan Linux
+  location            = var.location
+  os_type             = "Linux"
+  sku_name            = var.pricing_plan
+}
 
-  sku {
-    tier = var.app_service_plan_tier # Exemple : "Basic", "Standard", "Premium"
-    size = var.app_service_plan_size # Exemple : "B1", "S1", "P1v2"
+# Création de l'App Service Linux pour déployer le Docker
+resource "azurerm_linux_web_app" "app_service" {
+  name                = var.app_name
+  resource_group_name = var.resource_group_name
+  location            = azurerm_service_plan.app_service.location
+  service_plan_id     = azurerm_service_plan.app_service.id
+  app_settings        = var.app_settings
+
+  # Identité managée (SystemAssigned) pour l'App Service
+  identity {
+    type = "SystemAssigned"
   }
-}
 
-resource "azurerm_app_service" "app_service" {
-  name                = var.app_service_name
-  location            = var.location
-  resource_group_name = var.resource_group_name
-  app_service_plan_id = azurerm_app_service_plan.app_plan.id
-
+  # Configuration de l'application
   site_config {
-    linux_fx_version = var.linux_fx_version # Exemple : "DOCKER|nginx:latest" ou null pour Windows
-    always_on        = var.always_on        # Active ou désactive le mode Always On
+    always_on = var.pricing_plan != "F1"
+
+    application_stack {
+      docker_registry_url = var.docker_registry_url
+      docker_image_name   = var.docker_image
     }
-}
+  }
 
-
-resource "azurerm_app_service_virtual_network_swift_connection" "app_service_vnet" {
-  app_service_id = azurerm_app_service.app_service.id
-  subnet_id      = module.network.subnet_api_id
+  # Logs HTTP activés avec des limites
+  logs {
+    http_logs {
+      file_system {
+        retention_in_days = 1
+        retention_in_mb   = 50
+      }
+    }
+  }
 }

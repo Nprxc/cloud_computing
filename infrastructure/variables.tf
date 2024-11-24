@@ -225,3 +225,16 @@ variable "user_principal_id" {
   default     = null
   description = "ID of the user principal to grant access to the Blob Storage container"
 }
+
+# Nom de l'image Docker (gérée par le pipeline CI/CD)
+variable "docker_image" {
+  type        = string
+  description = "Nom de l'image Docker à déployer sur l'App Service"
+}
+
+# URL du registre Docker (par défaut Docker Hub)
+variable "docker_registry_url" {
+  type        = string
+  default     = "https://index.docker.io"
+  description = "URL du registre Docker pour l'image"
+}

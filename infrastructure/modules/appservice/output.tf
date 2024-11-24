@@ -1,9 +1,9 @@
-output "app_service_id" {
-  value       = azurerm_app_service.app_service.id
-  description = "ID de l'App Service"
+output "url" {
+  value       = "https://${azurerm_linux_web_app.app_service.default_hostname}/"
+  description = "URL publique pour accéder à l'App Service"
 }
 
-output "app_service_default_hostname" {
-  value       = azurerm_app_service.app_service.default_hostname
-  description = "Nom de domaine par défaut de l'App Service"
+output "principal_id" {
+  value       = azurerm_linux_web_app.app_service.identity[0].principal_id
+  description = "ID principal de l'identité managée de l'App Service"
 }

@@ -1,74 +1,64 @@
-# Localisation et groupe de ressources
-variable "location" {
-  type        = string
-  default     = "francecentral"
-  description = "Location of the resources"
-}
+############################################
+#              Variables Globales          #
+############################################
 
 variable "resource_group_name" {
   type        = string
-  default     = "cloud_computing_project"
-  description = "Name of the resource group in which all resources are grouped"
+  nullable    = false
+  description = "Nom du groupe de ressources dans lequel l'App Service sera créé"
 }
 
-# App Service variables
-variable "app_service_plan_name" {
+variable "location" {
   type        = string
-  default     = "my-app-service-plan"
-  description = "Name of the App Service plan"
+  nullable    = false
+  description = "Région Azure où les ressources seront déployées"
 }
 
-variable "app_service_plan_tier" {
+############################################
+#          Variables App Service          #
+############################################
+
+variable "app_name" {
   type        = string
-  default     = "Basic"
-  description = "Tier of the App Service plan"
+  default     = null
+  description = "Nom de l'application (App Service)"
 }
 
-variable "app_service_plan_size" {
+variable "pricing_plan" {
   type        = string
-  default     = "B1"
-  description = "Size of the App Service plan"
+  default     = "F1"
+  description = "Plan tarifaire du Service Plan (SKU)"
+
+  validation {
+    condition = contains([
+      "B1", "B2", "B3", "D1", "F1", "I1", "I2", "I3", "I1v2",
+      "I2v2", "I3v2", "I4v2", "I5v2", "I6v2", "P1v2", "P2v2",
+      "P3v2", "P0v3", "P1v3", "P2v3", "P3v3", "P1mv3", "P2mv3",
+      "P3mv3", "P4mv3", "P5mv3", "S1", "S2", "S3", "SHARED",
+      "EP1", "EP2", "EP3", "FC1", "WS1", "WS2", "WS3", "Y1"
+    ], var.pricing_plan)
+    error_message = "Le plan tarifaire doit être un SKU valide. Consultez https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/service_plan#sku_name."
+  }
 }
 
-variable "app_service_name" {
+############################################
+#      Variables Configuration Docker      #
+############################################
+
+variable "docker_image" {
   type        = string
-  default     = "my-app-service"
-  description = "Name of the App Service"
+  nullable    = false
+  description = "Nom de l'image Docker à déployer"
 }
 
-variable "linux_fx_version" {
+variable "docker_registry_url" {
   type        = string
-  default     = "DOCKER|nginx:latest"
-  description = "Linux FX version for the App Service"
+  default     = "https://index.docker.io"
+  description = "URL du registre Docker pour l'image"
 }
 
-variable "always_on" {
-  type        = bool
-  default     = true
-  description = "Whether the App Service should always be on"
-}
-
-# Database variables
-variable "database_server_name" {
-  type        = string
-  default     = "my-database-server"
-  description = "Name of the database server"
-}
-
-variable "database_name" {
-  type        = string
-  default     = "mydatabase"
-  description = "Name for the database within the server"
-}
-
-variable "database_username" {
-  type        = string
-  default     = "adminuser"
-  description = "Administrator username for the database"
-}
-
-variable "database_password" {
-  type        = string
-  sensitive   = true
-  description = "Administrator password for the database"
+variable "app_settings" {
+  description = "Paramètres de l'application (variables d'environnement)"
+  type        = map(string)
+  default     = {}
 }

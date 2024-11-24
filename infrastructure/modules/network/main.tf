@@ -39,13 +39,6 @@ resource "azurerm_subnet" "storage_subnet" {
   address_prefixes     = [var.subnet_storage_prefix]
 }
 
-resource "azurerm_subnet" "appservice_subnet" {
-  name                 = var.subnet_appservice_name
-  resource_group_name  = var.resource_group_name
-  virtual_network_name = azurerm_virtual_network.vnet.name
-  address_prefixes     = [var.subnet_appservice_prefix]
-}
-
 resource "azurerm_network_security_group" "nsg" {
   name                = var.nsg_name
   location            = var.location
