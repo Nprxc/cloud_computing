@@ -5,6 +5,7 @@ variable "storage_account_name" {
 
 variable "container_name" {
   type        = string
+  default     = "Blob Storage container"
   description = "Name of the blob container"
 }
 

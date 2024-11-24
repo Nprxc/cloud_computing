@@ -20,16 +20,9 @@ resource "azurerm_app_service" "app_service" {
   site_config {
     linux_fx_version = var.linux_fx_version # Exemple : "DOCKER|nginx:latest" ou null pour Windows
     always_on        = var.always_on        # Active ou désactive le mode Always On
-  }
-
-  app_settings = {
-    DB_HOST     = var.database_server_name
-    DB_PORT     = "5432"
-    DB_NAME     = var.database_name
-    DB_USER     = var.database_username
-    DB_PASSWORD = var.database_password
-  }
+    }
 }
+
 
 resource "azurerm_app_service_virtual_network_swift_connection" "app_service_vnet" {
   app_service_id = azurerm_app_service.app_service.id
