@@ -70,7 +70,7 @@ module "appservice" {
     DATABASE_PASSWORD = var.database_password
 
     STORAGE_ACCOUNT_URL = module.storage.storage_account_url
-
+    STORAGE_CONTAINER = module.storage.container_name
   }
 }
 
