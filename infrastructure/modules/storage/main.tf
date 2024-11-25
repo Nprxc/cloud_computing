@@ -33,6 +33,7 @@ resource "azurerm_role_assignment" "user_binding" {
 }
 
 resource "azurerm_storage_blob" "blob_storage" {
+  depends_on = [azurerm_storage_account.storage]
   name = "quotes.json"
   # Get the quotes.json file from the modules/storage directory and upload it to the storage account
   source                 = "${path.module}/quotes.json"

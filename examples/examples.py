@@ -53,7 +53,7 @@ def read_quotes():
         default_credential = DefaultAzureCredential(process_timeout=2)
         blob_service_client = BlobServiceClient(account_url, credential=default_credential)
 
-        container_client = blob_service_client.get_container_client(container=get_environment_variable("STORAGE_CONTAINER"))
+        container_client = blob_service_client.get_container_client(container="api")
         quotes = json.loads(container_client.download_blob("quotes.json").readall())
     except HttpResponseError as error:
         raise HTTPException(status_code=500, detail=str(error))
@@ -68,7 +68,14 @@ def initialize_database():
     """
     try:
         # Connexion à la base de données
-        conn = connect_to_db()
+        conn = psycopg2.connect(
+            host=get_environment_variable("DATABASE_HOST"),
+            port=get_environment_variable("DATABASE_PORT", "5432"),
+            database=get_environment_variable("DATABASE_NAME"),
+            user=get_environment_variable("DATABASE_USER"),
+            password=get_environment_variable("DATABASE_PASSWORD"),
+            connect_timeout=1,
+        )
         cur = conn.cursor()
 
         # Création de la table si elle n'existe pas
