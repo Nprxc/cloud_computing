@@ -1,60 +1,41 @@
-# Examples API
+# Projet : Cloud computing 
+API written by Fabien HUITELEC and declarative code of infrastructure (Microsoft Azure) using HCL Terraform.
 
-Simple API that returns example records from a database.
+## Project Description
+This project involves provisioning a cloud infrastructure on Microsoft Azure and deploying a Python-based API using the FastAPI framework. Additionally, it includes a CI/CD pipeline configured with GitHub Actions for automated testing, building, and deployment.
 
-## Prerequisites
+## Working group
+The whole project has been developed by four contributors:
+- Félix Dehandschoewercker 
+- Axel Guy
+- Maxime Burckel
 
-- you need to install [uv](https://docs.astral.sh/uv/guides/install-python/)
-- you must have a PostgreSQL instance available with an `example` table
+## Technologies used
+- Terraform by HashiCorp `v1.9.0`
+- Python `>=3.12`
+- FastAPI `>=0.115.0`
+- Uvicorn `>=0.22.0`
+- Azure CLI `v2.66+`
+- PostgreSQL
+- Docker
 
-## Installation
+## Project structure
+The repository is organized into the following directories:
+- `.github`: contains the CI/CD declaration
+- `examples`: contains the API written in Python using FastAPI framework
+- `infrastructure`: contains the cloud architecture declarations
+- `test`: contains, as the name suggests, unit tests for API endpoints 
 
-```shell
-# Install Python in the right version
-uv python install
+### Requirements
+- HashiCorp Terraform `v1.9.0+`: [Install Terraform](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli)
+- Azure CLI `v2.66+`: [Install Azure CLI](https://learn.microsoft.com/fr-fr/cli/azure/install-azure-cli)
+- Docker: [Install Docker](https://docs.docker.com/get-docker/)
 
-# Install dependencies and create virtual env
-uv sync
-```
+## Known Issues
+- /quotes not working due to permissions issues 
 
-## Run
-
-```shell
-# Export environment variables to connect to the PostgreSQL database...
-export DATABASE_HOST=
-export DATABASE_PORT=
-export DATABASE_NAME=
-export DATABASE_USER=
-export DATABASE_PASSWORD='' # Use single quotes to avoid shell interpolation with characters like $ or #
-# ...and the storage account
-export STORAGE_ACCOUNT_URL=
-
-# Run the application
-uv run fastapi dev examples/examples.py
-```
-
-## Run tests
-
-```
-uv run pytest tests/
-```
-
-They go on:
-
-- http://localhost:8000/docs
-- http://localhost:8000/
-- http://localhost:8000/examples
-
-
-# Attention il faut remplir le fichier secret.tfvars  avec les variables suivantes :
-
-```bash
-subscription_id = 
-tenant_id       = 
-email_address   = 
-database_password = 
-database_name  = 
-database_username   = 
-database_server_name   = 
-azure_ad_user_object_id = 
-```
+### Directives to run the project
+1. Clone this repository on your machine
+2. Go into /infrastructure and paste the environment variables
+3. Exec 'terraform plan -var-file="secret.tfvars" '
+4. terraform apply -var-file="secret.tfvars" 
