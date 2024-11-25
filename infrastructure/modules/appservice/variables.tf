@@ -62,3 +62,8 @@ variable "app_settings" {
   type        = map(string)
   default     = {}
 }
+
+variable "subnet_id" {
+  description = "ID du sous-réseau pour l'App Service"
+  type        = string
+}

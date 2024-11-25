@@ -23,6 +23,8 @@ module "network" {
   subnet_database_prefix = var.subnet_database_prefix
   subnet_storage_name = var.subnet_storage_name
   subnet_storage_prefix = var.subnet_storage_prefix
+  subnet_appservice_name   = var.subnet_appservice_name
+  subnet_appservice_prefix = var.subnet_appservice_prefix
 
   nsg_name            = var.nsg_name
   allow_http          = var.allow_http
@@ -57,13 +59,15 @@ module "appservice" {
   pricing_plan        = "B1"
   docker_image        = var.docker_image
   docker_registry_url = var.docker_registry_url
+  
+  subnet_id = module.network.subnet_appservice_id
 
   app_settings = {
-    DB_HOST    = module.database.server_address
-    DB_PORT    = "5432"
-    DB_NAME    = var.database_name
-    DB_USER    = var.database_username
-    DB_PASSWORD = var.database_password
+    DATABASE_HOST    = module.database.server_address
+    DATABASE_PORT    = "5432"
+    DATABASE_NAME    = var.database_name
+    DATABASE_USER    = var.database_username
+    DATABASE_PASSWORD = var.database_password
 
     STORAGE_ACCOUNT_URL = module.storage.storage_account_url
 

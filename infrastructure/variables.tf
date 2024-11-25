@@ -238,3 +238,4 @@ variable "docker_registry_url" {
   default     = "https://index.docker.io"
   description = "URL du registre Docker pour l'image"
 }
+

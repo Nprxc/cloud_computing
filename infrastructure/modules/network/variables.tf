@@ -76,3 +76,13 @@ variable "tenant_id" {
   description = "Azure tenant ID"
   type        = string
 }
+
+variable "subnet_appservice_name" {
+  type        = string
+  description = "Name of the App Service subnet"
+}
+
+variable "subnet_appservice_prefix" {
+  type        = string
+  description = "Address prefix for the App Service subnet"
+}
