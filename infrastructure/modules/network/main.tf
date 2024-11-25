@@ -94,3 +94,42 @@ resource "azurerm_network_security_rule" "allow_https" {
 
   resource_group_name = var.resource_group_name
 }
+
+
+# NSG pour la base de données
+resource "azurerm_network_security_group" "db_nsg" {
+  name                = "db-nsg"
+  location            = var.location
+  resource_group_name = var.resource_group_name
+
+  security_rule {
+    name                       = "Allow-App-To-DB"
+    priority                   = 100
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "5432"
+    source_address_prefix      = azurerm_subnet.appservice_subnet.address_prefixes[0]
+    destination_address_prefix = azurerm_subnet.database_subnet.address_prefixes[0]
+  }
+}
+
+# NSG pour l'App Service
+resource "azurerm_network_security_group" "app_nsg" {
+  name                = "app-nsg"
+  location            = var.location
+  resource_group_name = var.resource_group_name
+
+  security_rule {
+    name                       = "Allow-DB-To-App"
+    priority                   = 100
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "*"
+    source_address_prefix      = azurerm_subnet.database_subnet.address_prefixes[0]
+    destination_address_prefix = azurerm_subnet.appservice_subnet.address_prefixes[0]
+  }
+}
