@@ -71,9 +71,7 @@ module "appservice" {
 
     STORAGE_ACCOUNT_URL = module.storage.storage_account_url
     STORAGE_CONTAINER_NAME = var.container_name
-
-    NEW_RELIC_LICENSE_KEY  = var.new_relic_api_key
-    NEW_RELIC_APP_NAME     = var.app_service_name
+    
   }
 }
 

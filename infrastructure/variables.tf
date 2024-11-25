@@ -239,9 +239,4 @@ variable "docker_registry_url" {
   description = "URL du registre Docker pour l'image"
 }
 
-variable "new_relic_api_key" {
-  description = "The API key for New Relic"
-  type        = string
-  sensitive   = true
-}
 

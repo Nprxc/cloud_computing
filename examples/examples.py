@@ -53,7 +53,7 @@ def read_quotes():
         default_credential = DefaultAzureCredential(process_timeout=2)
         blob_service_client = BlobServiceClient(account_url, credential=default_credential)
 
-        container_client = blob_service_client.get_container_client(container=get_environment_variable("STORAGE_CONTAINER_NAME"))
+        container_client = blob_service_client.get_container_client(container="api")
         quotes = json.loads(container_client.download_blob("quotes.json").readall())
     except HttpResponseError as error:
         raise HTTPException(status_code=500, detail=str(error))
