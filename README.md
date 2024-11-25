@@ -36,6 +36,41 @@ The repository is organized into the following directories:
 
 ### Directives to run the project
 1. Clone this repository on your machine
-2. Go into /infrastructure and paste the environment variables
-3. Exec 'terraform plan -var-file="secret.tfvars" '
-4. terraform apply -var-file="secret.tfvars" 
+2. Go into /infrastructure and paste the environment variables in secret.tfvars file :
+```bash
+subscription_id = ""
+tenant_id       = ""
+
+email_address   = ""
+
+database_password = ""
+database_name        = ""
+database_username       = ""
+database_server_name          = ""
+
+azure_ad_user_object_id = ""
+
+storage_account_name = ""
+
+docker_image        = "ghcr.io/nprxc/cloud_computing:latest"
+docker_registry_url = "https://ghcr.io"
+app_service_name    = ""
+
+container_name = "api"
+
+```
+
+3. Exec :
+```bash
+terraform init 
+```
+
+4. And : 
+```bash
+terraform apply -var-file="secret.tfvars" 
+```
+
+5. wait 1-2 min and execute this command in terminal
+```bash
+curl -X POST https://< app_service_name >.azurewebsites.net/initialize-database
+```
