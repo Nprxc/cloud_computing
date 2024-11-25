@@ -59,3 +59,43 @@ def read_quotes():
         raise HTTPException(status_code=500, detail=str(error))
 
     return {"quotes": quotes}
+
+@app.post("/initialize-database")
+def initialize_database():
+    """
+    Initialize the database by creating the 'examples' table and inserting a default record.
+    This should be used cautiously in production environments.
+    """
+    try:
+        # Connexion à la base de données
+        conn = connect_to_db()
+        cur = conn.cursor()
+
+        # Création de la table si elle n'existe pas
+        create_table_query = """
+        CREATE TABLE IF NOT EXISTS examples (
+            id SERIAL PRIMARY KEY,
+            description TEXT
+        );
+        """
+        cur.execute(create_table_query)
+
+        # Insertion des données si elles n'existent pas
+        insert_data_query = """
+        INSERT INTO examples (description)
+        SELECT 'Hello world!'
+        WHERE NOT EXISTS (
+            SELECT 1 FROM examples WHERE description = 'Hello world!'
+        );
+        """
+        cur.execute(insert_data_query)
+
+        # Validation des changements
+        conn.commit()
+
+        cur.close()
+        conn.close()
+
+        return {"message": "Database initialized successfully"}
+    except psycopg2.Error as error:
+        raise HTTPException(status_code=500, detail=f"Error initializing database: {str(error)}")
