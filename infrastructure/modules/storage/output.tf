@@ -8,3 +8,8 @@ output "storage_container_name" {
   value       = azurerm_storage_container.container.name
   description = "Name of the storage container"
 }
+
+output "storage_account_url" {
+  value       = "https://${azurerm_storage_account.storage.name}.blob.core.windows.net"
+  description = "URL of the Azure Blob Storage account"
+}

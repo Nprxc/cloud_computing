@@ -30,3 +30,9 @@ variable "location" {
   type        = string
   description = "Location for the resources"
 }
+
+variable "appservice_principal_id" {
+  description = "Principal ID of the App Service's managed identity"
+  type        = string
+  nullable    = false
+}

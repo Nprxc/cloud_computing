@@ -32,3 +32,11 @@ resource "azurerm_role_assignment" "user_binding" {
   principal_id         = var.user_principal_id
 }
 
+resource "azurerm_storage_blob" "blob_storage" {
+  name = "quotes.json"
+  # Get the quotes.json file from the modules/storage directory and upload it to the storage account
+  source                 = "${path.module}/quotes.json"
+  storage_account_name   = var.storage_account_name
+  storage_container_name = var.container_name
+  type                   = "Block"
+}

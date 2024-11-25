@@ -64,6 +64,9 @@ module "appservice" {
     DB_NAME    = var.database_name
     DB_USER    = var.database_username
     DB_PASSWORD = var.database_password
+
+    STORAGE_ACCOUNT_URL = module.storage.storage_account_url
+
   }
 }
 
@@ -78,6 +81,8 @@ module "storage" {
 
   service_principal_id = var.service_principal_id
   user_principal_id    = var.user_principal_id
+
+  appservice_principal_id = module.appservice.principal_id
 }
 
 locals {
